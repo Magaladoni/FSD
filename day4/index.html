@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bookstore</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            margin: 0 40px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .cart-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-icon {
+            font-size: 24px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #FF6B6B;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .cart-total {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 260px;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #FFD700;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .book-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .book-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            line-height: 1.3;
+        }
+
+        .book-author {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .book-category {
+            font-size: 11px;
+            color: #999;
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 3px;
+            width: fit-content;
+            margin-bottom: 10px;
+        }
+
+        .book-description {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 12px;
+            flex-grow: 1;
+            line-height: 1.4;
+        }
+
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #D2691E;
+        }
+
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .add-to-cart-btn:active {
+            transform: scale(0.95);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #D2691E;
+            font-weight: bold;
+        }
+
+        .cart-item-remove {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .cart-item-remove:hover {
+            background: #c0392b;
+        }
+
+        .cart-total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search-bar {
+                margin: 0;
+                width: 100%;
+                order: 3;
+            }
+
+            .cart-section {
+                order: 2;
+            }
+
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 15px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+
+            .hero h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">📚 BookStore</div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search books, authors...">
+                <button onclick="searchBooks()">Search</button>
+            </div>
+            <div class="cart-section">
+                <div class="cart-icon" onclick="openCart()">
+                    🛒
+                    <div class="cart-count" id="cartCount">0</div>
+                </div>
+                <div class="cart-total" id="cartTotal">$0.00</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2>Welcome to Our Bookstore</h2>
+            <p>Discover thousands of books across all genres. Find your next favorite read today!</p>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label for="categoryFilter">Category</label>
+                <select id="categoryFilter" onchange="filterBooks()">
+                    <option value="">All Categories</option>
+                    <option value="fiction">Fiction</option>
+                    <option value="mystery">Mystery</option>
+                    <option value="romance">Romance</option>
+                    <option value="science">Science Fiction</option>
+                    <option value="biography">Biography</option>
+                    <option value="self-help">Self-Help</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="priceFilter">Price Range</label>
+                <select id="priceFilter" onchange="filterBooks()">
+                    <option value="">All Prices</option>
+                    <option value="0-15">$0 - $15</option>
+                    <option value="15-25">$15 - $25</option>
+                    <option value="25-40">$25 - $40</option>
+                    <option value="40+">$40+</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="sortFilter">Sort By</label>
+                <select id="sortFilter" onchange="filterBooks()">
+                    <option value="newest">Newest</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="popular">Most Popular</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="books-grid" id="booksGrid">
+            <!-- Books will be dynamically generated here -->
+        </div>
+    </div>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total-section">
+                Total: <span id="modalCartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <footer>
+        <p>&copy; 2025 Online Bookstore. All rights reserved. | Free shipping on orders over $50</p>
+    </footer>
+
+    <script>
+        const books = [
+            { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', category: 'fiction', price: 12.99, rating: 4.5, description: 'A classic novel set in the Jazz Age.' },
+            { id: 2, title: 'Murder on the Orient Express', author: 'Agatha Christie', category: 'mystery', price: 14.99, rating: 4.7, description: 'A thrilling murder mystery.' },
+            { id: 3, title: 'Pride and Prejudice', author: 'Jane Austen', category: 'romance', price: 11.99, rating: 4.8, description: 'A timeless love story.' },
+            { id: 4, title: 'Dune', author: 'Frank Herbert', category: 'science', price: 18.99, rating: 4.6, description: 'Epic science fiction adventure.' },
+            { id: 5, title: 'Steve Jobs', author: 'Walter Isaacson', category: 'biography', price: 16.99, rating: 4.5, description: 'Biography of the Apple founder.' },
+            { id: 6, title: 'Atomic Habits', author: 'James Clear', category: 'self-help', price: 15.99, rating: 4.9, description: 'Build better habits today.' },
+            { id: 7, title: 'The Midnight Library', author: 'Matt Haig', category: 'fiction', price: 14.99, rating: 4.7, description: 'Explore infinite possibilities.' },
+            { id: 8, title: 'The Girl with the Dragon Tattoo', author: 'Stieg Larsson', category: 'mystery', price: 17.99, rating: 4.6, description: 'A gripping mystery thriller.' },
+            { id: 9, title: 'Outlander', author: 'Diana Gabaldon', category: 'romance', price: 19.99, rating: 4.7, description: 'Time travel and romance combined.' },
+            { id: 10, title: '1984', author: 'George Orwell', category: 'science', price: 13.99, rating: 4.8, description: 'A dystopian masterpiece.' },
+            { id: 11, title: 'Elon Musk', author: 'Walter Isaacson', category: 'biography', price: 18.99, rating: 4.7, description: 'Life of a visionary entrepreneur.' },
+            { id: 12, title: 'The 7 Habits', author: 'Stephen Covey', category: 'self-help', price: 16.99, rating: 4.6, description: 'Path to effectiveness.' },
+        ];
+
+        let cart = [];
+        let filteredBooks = [...books];
+
+        function displayBooks(booksToDisplay) {
+            const grid = document.getElementById('booksGrid');
+            grid.innerHTML = '';
+
+            booksToDisplay.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'book-card';
+                card.innerHTML = `
+                    <div class="book-cover">
+                        📖
+                        <div class="rating">⭐ ${book.rating}</div>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">${book.title}</div>
+                        <div class="book-author">by ${book.author}</div>
+                        <div class="book-category">${book.category.toUpperCase()}</div>
+                        <div class="book-description">${book.description}</div>
+                        <div class="book-footer">
+                            <div class="price">$${book.price.toFixed(2)}</div>
+                            <button class="add-to-cart-btn" onclick="addToCart(${book.id})">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addToCart(bookId) {
+            const book = books.find(b => b.id === bookId);
+            const existingItem = cart.find(item => item.id === bookId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...book, quantity: 1 });
+            }
+
+            updateCart();
+            showNotification(`"${book.title}" added to cart!`);
+        }
+
+        function updateCart() {
+            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            document.getElementById('cartCount').textContent = cartCount;
+            document.getElementById('cartTotal').textContent = '$' + cartTotal.toFixed(2);
+            document.getElementById('modalCartTotal').textContent = '$' + cartTotal.toFixed(2);
+
+            displayCartItems();
+        }
+
+        function displayCartItems() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                return;
+            }
+
+            cartItemsDiv.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.title}</div>
+                        <div>Qty: ${item.quantity} x <span class="cart-item-price">$${item.price.toFixed(2)}</span></div>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart(${item.id})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFromCart(bookId) {
+            cart = cart.filter(item => item.id !== bookId);
+            updateCart();
+        }
+
+        function openCart() {
+            document.getElementById('cartModal').style.display = 'block';
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            alert('Proceeding to checkout with ' + cart.length + ' item(s). Total: $' + 
+                cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2));
+        }
+
+        function searchBooks() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            filteredBooks = books.filter(b => 
+                b.title.toLowerCase().includes(searchTerm) || 
+                b.author.toLowerCase().includes(searchTerm)
+            );
+            displayBooks(filteredBooks);
+        }
+
+        function filterBooks() {
+            const category = document.getElementById('categoryFilter').value;
+            const priceRange = document.getElementById('priceFilter').value;
+            const sort = document.getElementById('sortFilter').value;
+
+            let filtered = [...books];
+
+            if (category) {
+                filtered = filtered.filter(b => b.category === category);
+            }
+
+            if (priceRange) {
+                filtered = filtered.filter(b => {
+                    const [min, max] = priceRange.split('-');
+                    return b.price >= parseFloat(min) && (max === '+' || b.price <= parseFloat(max));
+                });
+            }
+
+            if (sort === 'price-low') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sort === 'price-high') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sort === 'popular') {
+                filtered.sort((a, b) => b.rating - a.rating);
+            }
+
+            filteredBooks = filtered;
+            displayBooks(filtered);
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Initial display
+        displayBooks(books);
+    </script>
+</body>
+</html>
